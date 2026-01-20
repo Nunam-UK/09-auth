@@ -48,7 +48,6 @@ export const fetchNotes = async (params: FetchNotesParams = {}) => {
   const res = await instance.get('/notes', { 
     params: { ...params, perPage: 12 } 
   });
-  // Повертаємо об'єкт з нотатками та кількістю сторінок
   return res.data; 
 };
 
@@ -59,5 +58,10 @@ export const createNote = async (data: { title: string; content: string; tag: st
 
 export const deleteNote = async (id: string): Promise<Note> => {
   const res = await instance.delete(`/notes/${id}`);
+  return res.data;
+};
+
+export const fetchNoteById = async (id: string): Promise<Note> => {
+  const res = await instance.get(`/notes/${id}`);
   return res.data;
 };

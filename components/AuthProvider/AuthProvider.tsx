@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { checkSession } from '@/lib/api/clientApi';
+import { checkSession, getMe } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const { setUser, clearIsAuthenticated } = useAuthStore();
   const pathname = usePathname();
   const router = useRouter();
@@ -17,7 +17,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const result = await checkSession();
         
         if (result.success && result.user) {
-          setUser(result.user);
+          const fullUserData = await getMe(); 
+          setUser(fullUserData); 
         } else {
           clearIsAuthenticated();
           if (pathname.includes('/notes') || pathname.includes('/profile')) {
@@ -27,14 +28,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } catch {
         clearIsAuthenticated();
       } finally {
-        setIsLoading(false);
+        setIsInitialLoading(false);
       }
     };
 
     verifySession();
   }, [pathname, router, setUser, clearIsAuthenticated]);
 
-  if (isLoading) return <div>Loading session...</div>;
+  if (isInitialLoading) return <div className="loader">Loading session...</div>;
 
   return <>{children}</>;
 };
