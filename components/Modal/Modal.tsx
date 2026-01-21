@@ -1,27 +1,45 @@
 'use client';
-import { ReactNode, useEffect } from 'react';
+
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef } from 'react';
 import css from './Modal.module.css';
 
-interface ModalProps {
-  children: ReactNode;
-  onClose: () => void;
-}
+export default function Modal({ children }: { children: React.ReactNode }) {
+  const backdrop = useRef<HTMLDivElement>(null);
+  const modal = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
-export const Modal = ({ children, onClose }: ModalProps) => {
+  const onDismiss = useCallback(() => {
+    router.back(); 
+  }, [router]);
+
+  const onClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (e.target === backdrop.current) {
+        onDismiss();
+      }
+    },
+    [onDismiss]
+  );
+
+  const onKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onDismiss();
+    },
+    [onDismiss]
+  );
+
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, [onClose]);
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onKeyDown]);
 
   return (
-    <div className={css.backdrop} onClick={onClose}>
-      <div className={css.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={css.closeBtn} onClick={onClose}>&times;</button>
+    <div ref={backdrop} className={css.backdrop} onClick={onClick}>
+      <div ref={modal} className={css.modal}>
+        <button className={css.closeBtn} onClick={onDismiss}>✕</button>
         {children}
       </div>
     </div>
   );
-};
+}

@@ -1,28 +1,69 @@
+.pageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 50px;
+  min-height: calc(100vh - 80px);
+  background-color: #f9f9f9;
+}
+
 .form {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 500px;
+}
+
+.title {
+  margin-bottom: 25px;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+}
+
+.field {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
-.form input,
-.form textarea,
-.form select {
+.field label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #555;
+}
+
+.field input,
+.field select,
+.field textarea {
   padding: 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 16px;
-  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
-.form textarea {
-  min-height: 150px;
-  resize: vertical;
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #0070f3;
 }
 
-.form button {
-  background-color: #007bff;
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.submitBtn {
+  background-color: #0070f3;
   color: white;
-  padding: 12px;
+  padding: 10px 20px;
   border: none;
   border-radius: 8px;
   font-weight: 600;
@@ -30,11 +71,19 @@
   transition: background 0.2s;
 }
 
-.form button:hover {
-  background-color: #0056b3;
+.submitBtn:hover {
+  background-color: #0051cc;
 }
 
-.form button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.cancelBtn {
+  padding: 10px 20px;
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.cancelBtn:hover {
+  color: #333;
 }

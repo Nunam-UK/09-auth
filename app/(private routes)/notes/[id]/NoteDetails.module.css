@@ -1,0 +1,98 @@
+.main {
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 80px);
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+}
+
+.nav {
+  margin-bottom: 20px;
+}
+
+.backBtn {
+  color: #0070f3;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.2s;
+}
+
+.backBtn:hover {
+  opacity: 0.7;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eaeaea;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 16px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.tag {
+  background: #e1f0ff;
+  color: #0070f3;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.content {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #374151;
+  white-space: pre-wrap;
+}
+
+.footer {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.editBtn {
+  display: inline-block;
+  padding: 10px 24px;
+  background-color: #0070f3;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.editBtn:hover {
+  background-color: #0056b3;
+}
+
+.loader,
+.errorContainer {
+  text-align: center;
+  padding: 100px 20px;
+  font-size: 18px;
+}

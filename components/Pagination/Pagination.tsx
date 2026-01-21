@@ -1,3 +1,5 @@
+'use client';
+
 import css from './Pagination.module.css';
 
 interface PaginationProps {
@@ -6,13 +8,22 @@ interface PaginationProps {
   onChange: (page: number) => void;
 }
 
-export const Pagination = ({ current, total, onChange }: PaginationProps) => {
+export default function Pagination({ current, total, onChange }: PaginationProps) {
+  const pages = Array.from({ length: total }, (_, i) => i + 1);
+
   if (total <= 1) return null;
+
   return (
     <div className={css.pagination}>
-      <button onClick={() => onChange(current - 1)} disabled={current === 1}>← Previous</button>
-      <span>Page {current} of {total}</span>
-      <button onClick={() => onChange(current + 1)} disabled={current === total}>Next →</button>
+      {pages.map((page) => (
+        <button
+          key={page}
+          className={page === current ? css.activePage : css.pageBtn}
+          onClick={() => onChange(page)}
+        >
+          {page}
+        </button>
+      ))}
     </div>
   );
-};
+}

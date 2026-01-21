@@ -1,0 +1,38 @@
+.sidebar {
+  width: 260px;
+  padding: 24px;
+  border-right: 1px solid #eee;
+  background: #f9f9f9;
+  min-height: calc(100vh - 80px);
+}
+
+.heading {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.link {
+  padding: 10px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #555;
+  transition: all 0.2s;
+}
+
+.link:hover {
+  background: #ececec;
+}
+
+.active {
+  background: #0070f3;
+  color: white !important;
+}

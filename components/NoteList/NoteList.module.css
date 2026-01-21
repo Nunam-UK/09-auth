@@ -1,103 +1,62 @@
-.notesGrid {
+.grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 25px;
-  margin-top: 30px;
+  gap: 20px;
+  padding: 20px 0;
 }
 
-.noteLink {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-.noteCard {
-  background: #ffffff;
-  border-radius: 15px;
-  padding: 25px;
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 220px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  transition: all 0.2s ease-in-out;
+  background: white;
+  transition: transform 0.2s;
 }
 
-.noteCard:hover {
-  transform: translateY(-5px);
-  border-color: #cbd5e1;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.noteCard h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.3rem;
-  color: #1a1a1a;
-  font-weight: 700;
+.tag {
+  display: inline-block;
+  background: #eee;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin: 8px 0;
 }
 
-.noteCard p {
-  color: #666;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  flex-grow: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  line-clamp: 3;
-  overflow: hidden;
-}
-
-.noteFooter {
+.actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 10px;
   margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid #f1f5f9;
 }
 
-.tagBadge {
-  background: #eef4ff;
-  color: #007bff;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: capitalize;
-  border: 1px solid #d0e3ff;
-}
-
+.viewBtn,
+.editBtn,
 .deleteBtn {
-  background-color: #fff;
-  color: #dc3545;
-  border: 1.5px solid #dc3545;
-  padding: 7px 15px;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  border: none;
 }
 
-.deleteBtn:hover {
-  background-color: #dc3545;
-  color: #fff;
+.viewBtn {
+  background: #0070f3;
+  color: white;
 }
-
-.deleteBtn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.editBtn {
+  background: #f0f0f0;
+  color: #333;
 }
-
-.emptyState {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 60px;
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  border: 2px dashed #e0e0e0;
-  color: #6c757d;
-  font-size: 18px;
+.deleteBtn {
+  background: #ff4d4f;
+  color: white;
 }

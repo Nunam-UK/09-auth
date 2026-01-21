@@ -1,7 +1,13 @@
 .footer {
   padding: 20px 0;
-  background-color: #212529;
-  color: #adb5bd;
-  text-align: center;
+  border-top: 1px solid #eaeaea;
   margin-top: auto;
+  background-color: #fafafa;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
 }

@@ -2,52 +2,64 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 import { register } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import css from './SignUpPage.module.css';
 
 export default function SignUpPage() {
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const setUser = useAuthStore((state) => state.setUser);
+  const { setUser } = useAuthStore();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
+
     const formData = new FormData(e.currentTarget);
-    
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
     try {
-      const data = await register(Object.fromEntries(formData));
-      setUser(data);
-      router.push('/profile');
+      const user = await register({ email, password });
+      setUser(user);
+      router.push('/notes/filter/all');
     } catch (err: unknown) {
-      if (err && typeof err === 'object' && 'response' in err) {
-        const axiosError = err as { response: { data: { error?: string } } };
-        setError(axiosError.response.data.error || 'Registration failed');
-      } else if (err instanceof Error) {
-        setError(err.message);
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || 'Registration failed');
       } else {
         setError('An unexpected error occurred');
       }
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
-    <div className={css.mainContent}>
-      <h1 className={css.formTitle}>Sign up</h1>
+    <main className={css.mainContent}>
       <form className={css.form} onSubmit={handleSubmit}>
+        <h1 className={css.formTitle}>Sign up</h1>
+        
         <div className={css.formGroup}>
           <label htmlFor="email">Email</label>
           <input id="email" type="email" name="email" className={css.input} required />
         </div>
+
         <div className={css.formGroup}>
           <label htmlFor="password">Password</label>
           <input id="password" type="password" name="password" className={css.input} required />
         </div>
+
         <div className={css.actions}>
-          <button type="submit" className={css.submitButton}>Register</button>
+          <button type="submit" className={css.submitButton} disabled={loading}>
+            {loading ? 'Processing...' : 'Register'}
+          </button>
         </div>
+
         {error && <p className={css.error}>{error}</p>}
       </form>
-    </div>
+    </main>
   );
 }

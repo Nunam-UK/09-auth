@@ -1,0 +1,67 @@
+.app {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+}
+
+.button {
+  background-color: #0070f3;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.backgroundBlur {
+  filter: blur(5px);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  background-color: #ffffff;
+  border: 2px dashed #e0e0e0;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+.emptyText {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.createLink {
+  background-color: #0070f3;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.loader {
+  text-align: center;
+  padding: 100px;
+  color: #999;
+}

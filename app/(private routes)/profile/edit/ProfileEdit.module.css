@@ -1,0 +1,74 @@
+.mainContent {
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.profileCard {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.avatar {
+  border-radius: 50%;
+  margin-bottom: 24px;
+}
+
+.usernameWrapper {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.usernameWrapper label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.saveButton {
+  padding: 10px 24px;
+  background: #0070f3;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancelButton {
+  padding: 10px 24px;
+  background: #eee;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.formTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+}
+
+.profileInfo p {
+  margin: 16px 0;
+  font-size: 16px;
+  color: #666;
+}
