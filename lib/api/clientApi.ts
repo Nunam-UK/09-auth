@@ -3,7 +3,6 @@ import { User } from '@/types/user';
 import { NoteData } from '@/types/note';
 import { FetchNotesParams, FetchNotesResponse, CreateNotePayload } from '@/types/api';
 
-// Auth
 export const register = async (data: Pick<User, 'email'> & { password: string }) => {
   const { data: response } = await instance.post<User>('/auth/register', data);
   return response;
@@ -23,7 +22,6 @@ export const checkSession = async (): Promise<User> => {
   return data;
 };
 
-// Users
 export const getMe = async (): Promise<User> => {
   const { data } = await instance.get<User>('/users/me');
   return data;
@@ -34,7 +32,6 @@ export const updateMe = async (data: { username: string }): Promise<User> => {
   return response;
 };
 
-// Notes
 export const fetchNotes = async ({ page, perPage, search, tag }: FetchNotesParams): Promise<FetchNotesResponse> => {
   const { data } = await instance.get<FetchNotesResponse>('/notes', {
     params: { 
@@ -62,11 +59,6 @@ export const updateNote = async (id: string, data: Partial<CreateNotePayload>): 
   return response;
 };
 
-export const deleteNote = async (id: string) => {
-  const response = await instance.delete(`/notes/${id}`, {
-    headers: {
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}` 
-    }
-  });
-  return response.data;
+export const deleteNote = async (id: string): Promise<void> => {
+  await instance.delete(`/notes/${id}`);
 };

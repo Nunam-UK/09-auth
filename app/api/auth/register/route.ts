@@ -5,8 +5,6 @@ import { parse } from 'cookie';
 import { isAxiosError } from 'axios';
 import { logErrorResponse } from '../../_utils/utils';
 
-export const dynamic = 'force-dynamic';
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -23,13 +21,9 @@ export async function POST(req: NextRequest) {
 
         const options = {
           expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
-          path: parsed.Path || '/',
-          maxAge: parsed['Max-Age'] ? Number(parsed['Max-Age']) : undefined,
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax' as const,
+          path: parsed.Path,
+          maxAge: Number(parsed['Max-Age']),
         };
-
         if (parsed.accessToken) cookieStore.set('accessToken', parsed.accessToken, options);
         if (parsed.refreshToken) cookieStore.set('refreshToken', parsed.refreshToken, options);
       }
@@ -42,7 +36,7 @@ export async function POST(req: NextRequest) {
       logErrorResponse(error.response?.data);
       return NextResponse.json(
         { error: error.message, response: error.response?.data },
-        { status: error.response?.status || 500 }
+        { status: error.status }
       );
     }
     logErrorResponse({ message: (error as Error).message });

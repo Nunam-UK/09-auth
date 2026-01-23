@@ -1,9 +1,11 @@
+
+
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createNote, updateNote } from '@/lib/api/clientApi'; 
+import { useNoteStore } from '@/lib/store/noteStore';
 import css from './NoteForm.module.css';
 
 const TAGS = ['Work', 'Personal', 'Meeting', 'Shopping', 'Ideas', 'Travel', 'Finance', 'Health', 'Important', 'Todo'];
@@ -20,32 +22,29 @@ interface NoteFormProps {
 
 export default function NoteForm({ mode, initialData }: NoteFormProps) {
   const router = useRouter();
-  
-  const [title, setTitle] = useState(initialData?.title || '');
-  const [text, setText] = useState(initialData?.content || '');
-  const [tag, setTag] = useState(initialData?.tag || 'Personal');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      if (mode === 'edit' && initialData) {
-       
-        await updateNote(initialData.id, { title, content: text, tag });
-      } else {
-       
-        await createNote({ title, content: text, tag });
-      }
-      
+  const queryClient = useQueryClient();
+  const { draftNote, setDraftNote, resetDraftNote } = useNoteStore();
+  const mutation = useMutation({
+    mutationFn: (data: { title: string; content: string; tag: string }) => {
+      return mode === 'edit' && initialData
+        ? updateNote(initialData.id, data)
+        : createNote(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      resetDraftNote();
       router.push('/notes/filter/all');
-      router.refresh(); 
-    } catch (error) {
-      console.error('Operation failed:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    },
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setDraftNote({ [name]: value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutation.mutate(draftNote);
   };
 
   return (
@@ -59,9 +58,10 @@ export default function NoteForm({ mode, initialData }: NoteFormProps) {
           <label htmlFor="title">Title</label>
           <input
             id="title"
+            name="title"
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={draftNote.title}
+            onChange={handleChange}
             placeholder="Enter title..."
             required
           />
@@ -69,7 +69,7 @@ export default function NoteForm({ mode, initialData }: NoteFormProps) {
 
         <div className={css.field}>
           <label htmlFor="tag">Category</label>
-          <select id="tag" value={tag} onChange={(e) => setTag(e.target.value)}>
+          <select id="tag" name="tag" value={draftNote.tag} onChange={handleChange}>
             {TAGS.map((t) => (
               <option key={t} value={t}>{t}</option>
             ))}
@@ -77,11 +77,12 @@ export default function NoteForm({ mode, initialData }: NoteFormProps) {
         </div>
 
         <div className={css.field}>
-          <label htmlFor="text">Content</label>
+          <label htmlFor="content">Content</label>
           <textarea
-            id="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
+            id="content"
+            name="content"
+            value={draftNote.content}
+            onChange={handleChange}
             placeholder="Write your note here..."
             rows={5}
             required
@@ -89,13 +90,18 @@ export default function NoteForm({ mode, initialData }: NoteFormProps) {
         </div>
 
         <div className={css.actions}>
-          <Link href="/notes/filter/all" className={css.cancelBtn}>
+          <button 
+            type="button" 
+            className={css.cancelBtn} 
+            onClick={() => router.back()}
+          >
             Cancel
-          </Link>
-          <button type="submit" className={css.submitBtn} disabled={isLoading}>
-            {isLoading ? 'Saving...' : mode === 'create' ? 'Create Note' : 'Save Changes'}
+          </button>
+          <button type="submit" className={css.submitBtn} disabled={mutation.isPending}>
+            {mutation.isPending ? 'Saving...' : mode === 'create' ? 'Create Note' : 'Save Changes'}
           </button>
         </div>
+        {mutation.isError && <p className={css.error}>Something went wrong. Please try again.</p>}
       </form>
     </div>
   );

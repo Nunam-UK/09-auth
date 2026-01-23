@@ -25,7 +25,9 @@ export default function SignUpPage() {
     try {
       const user = await register({ email, password });
       setUser(user);
-      router.push('/notes/filter/all');
+      
+      router.push('/profile');
+      
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Registration failed');

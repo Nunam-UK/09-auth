@@ -1,4 +1,4 @@
-// lib/api/serverApi.ts
+
 import { cookies } from 'next/headers';
 import { instance } from './api';
 
@@ -26,8 +26,18 @@ export const getMeServer = async () => {
 export const checkSessionServer = async () => {
   const headers = await getServerHeaders();
   try {
-    const { data } = await instance.get('/auth/session', headers);
-    return data;
+    const response = await instance.get('/auth/session', headers);
+    return response; 
+  } catch {
+    return null;
+  }
+};
+
+
+export const refreshSession = async (refreshToken: string) => {
+  try {
+    const { data } = await instance.post('/auth/refresh', { refreshToken });
+    return data; 
   } catch {
     return null;
   }

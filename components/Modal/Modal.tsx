@@ -4,14 +4,22 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 import css from './Modal.module.css';
 
-export default function Modal({ children }: { children: React.ReactNode }) {
-  const backdrop = useRef<HTMLDivElement>(null);
-  const modal = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
+interface ModalProps {
+  children: React.ReactNode;
+  onClose?: () => void; 
+}
+
+export default function Modal({ children, onClose }: ModalProps) {
+  const backdrop = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const onDismiss = useCallback(() => {
-    router.back(); 
-  }, [router]);
+    if (onClose) {
+      onClose();
+    } else {
+      router.back();
+    }
+  }, [router, onClose]);
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
@@ -36,8 +44,10 @@ export default function Modal({ children }: { children: React.ReactNode }) {
 
   return (
     <div ref={backdrop} className={css.backdrop} onClick={onClick}>
-      <div ref={modal} className={css.modal}>
-        <button className={css.closeBtn} onClick={onDismiss}>✕</button>
+      <div className={css.modal}>
+        <button className={css.closeBtn} onClick={onDismiss} aria-label="Close modal">
+          ✕
+        </button>
         {children}
       </div>
     </div>
