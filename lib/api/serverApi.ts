@@ -1,6 +1,9 @@
 
 import { cookies } from 'next/headers';
 import { instance } from './api';
+import { AxiosResponse } from 'axios';
+import { NoteData } from '@/types/note';
+import { User } from '@/types/user' 
 
 const getServerHeaders = async () => {
   const cookieStore = await cookies();
@@ -11,34 +14,25 @@ const getServerHeaders = async () => {
   };
 };
 
-export const fetchNoteByIdServer = async (id: string) => {
+export const fetchNoteByIdServer = async (id: string): Promise<NoteData> => {
   const headers = await getServerHeaders();
-  const { data } = await instance.get(`/notes/${id}`, headers);
+  const { data } = await instance.get<NoteData>(`/notes/${id}`, headers);
   return data;
 };
 
-export const getMeServer = async () => {
+export const fetchAllNotesServer = async (): Promise<NoteData[]> => {
   const headers = await getServerHeaders();
-  const { data } = await instance.get('/users/me', headers);
+  const { data } = await instance.get<NoteData[]>('/notes', headers);
   return data;
 };
 
-export const checkSessionServer = async () => {
+export const getMeServer = async (): Promise<User> => {
   const headers = await getServerHeaders();
-  try {
-    const response = await instance.get('/auth/session', headers);
-    return response; 
-  } catch {
-    return null;
-  }
+  const { data } = await instance.get<User>('/users/me', headers);
+  return data;
 };
 
-
-export const refreshSession = async (refreshToken: string) => {
-  try {
-    const { data } = await instance.post('/auth/refresh', { refreshToken });
-    return data; 
-  } catch {
-    return null;
-  }
+export const checkSessionServer = async (): Promise<AxiosResponse> => {
+  const headers = await getServerHeaders();
+  return await instance.get('/auth/session', headers);
 };

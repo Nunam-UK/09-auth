@@ -1,34 +1,24 @@
 
-
 'use client';
 
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createNote, updateNote } from '@/lib/api/clientApi'; 
+import { createNote } from '@/lib/api/clientApi'; // Видалено updateNote
 import { useNoteStore } from '@/lib/store/noteStore';
 import css from './NoteForm.module.css';
 
 const TAGS = ['Work', 'Personal', 'Meeting', 'Shopping', 'Ideas', 'Travel', 'Finance', 'Health', 'Important', 'Todo'];
 
-interface NoteFormProps {
-  mode: 'create' | 'edit';
-  initialData?: {
-    id: string;
-    title: string;
-    content: string;
-    tag: string;
-  };
-}
-
-export default function NoteForm({ mode, initialData }: NoteFormProps) {
+// ПУНКТ 2: Видалено NoteFormProps, оскільки компоненту більше не потрібні mode або initialData
+export default function NoteForm() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { draftNote, setDraftNote, resetDraftNote } = useNoteStore();
+
+  // ПУНКТ 1: Спрощено mutationFn для використання лише createNote
   const mutation = useMutation({
     mutationFn: (data: { title: string; content: string; tag: string }) => {
-      return mode === 'edit' && initialData
-        ? updateNote(initialData.id, data)
-        : createNote(data);
+      return createNote(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
@@ -50,9 +40,8 @@ export default function NoteForm({ mode, initialData }: NoteFormProps) {
   return (
     <div className={css.pageWrapper}>
       <form className={css.form} onSubmit={handleSubmit}>
-        <h1 className={css.title}>
-          {mode === 'create' ? 'Create New Note' : 'Edit Note'}
-        </h1>
+        {/* ПУНКТ 2: Статичний заголовок замість динамічного */}
+        <h1 className={css.title}>Create New Note</h1>
 
         <div className={css.field}>
           <label htmlFor="title">Title</label>
@@ -98,7 +87,8 @@ export default function NoteForm({ mode, initialData }: NoteFormProps) {
             Cancel
           </button>
           <button type="submit" className={css.submitBtn} disabled={mutation.isPending}>
-            {mutation.isPending ? 'Saving...' : mode === 'create' ? 'Create Note' : 'Save Changes'}
+            {/* ПУНКТ 2: Статичний текст кнопки */}
+            {mutation.isPending ? 'Saving...' : 'Create Note'}
           </button>
         </div>
         {mutation.isError && <p className={css.error}>Something went wrong. Please try again.</p>}
