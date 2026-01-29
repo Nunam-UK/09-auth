@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { getMeServer } from '@/lib/api/serverApi';
+import { User } from '@/types/user'; 
 import css from './Profile.module.css';
 
 export const metadata: Metadata = {
@@ -10,10 +12,16 @@ export const metadata: Metadata = {
 };
 
 export default async function ProfilePage() {
-  const user = await getMeServer();
+  let user: User | null = null;
+
+  try {
+    user = await getMeServer();
+  } catch {
+    redirect('/sign-in');
+  }
 
   if (!user) {
-    return <div>User not found. Please log in again.</div>;
+    redirect('/sign-in');
   }
 
   return (

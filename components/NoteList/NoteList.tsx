@@ -54,9 +54,7 @@ export default function NoteList({ notes }: NoteListProps) {
             <Link href={`/notes/${note.id}`} className={css.viewBtn} scroll={false}>
               View
             </Link>
-            <Link href={`/notes/action/edit/${note.id}`} className={css.editBtn}>
-              Edit
-            </Link>
+            
             <button 
               className={css.deleteBtn} 
               onClick={() => confirmDelete(note.id, note.title)}
