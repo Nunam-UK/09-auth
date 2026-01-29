@@ -8,7 +8,6 @@ const AUTH_ROUTES = ['/sign-in', '/sign-up'];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
   const refreshToken = cookieStore.get('refreshToken')?.value;
@@ -26,17 +25,16 @@ export async function proxy(request: NextRequest) {
   if (!accessToken && refreshToken) {
     try {
       const apiResponse = await checkSessionServer();
-      const nextResponse = NextResponse.next();
+      const targetUrl = isAuthRoute 
+        ? new URL('/notes/filter/all', request.url) 
+        : request.url;
 
+      const nextResponse = NextResponse.redirect(targetUrl);
       const setCookieHeader = apiResponse?.headers['set-cookie'];
       if (setCookieHeader) {
         setCookieHeader.forEach((cookie: string) => {
           nextResponse.headers.append('Set-Cookie', cookie);
         });
-      }
-
-      if (isAuthRoute) {
-        return NextResponse.redirect(new URL('/notes/filter/all', request.url));
       }
 
       return nextResponse;
@@ -59,6 +57,5 @@ export const config = {
     '/profile/:path*',
     '/notes/:path*',
     '/sign-in',
-    '/sign-up',
-  ],
+    '/sign-up'],
 };
